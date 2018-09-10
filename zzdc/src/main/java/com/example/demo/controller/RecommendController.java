@@ -23,21 +23,9 @@ public class RecommendController extends BaseController{
     private RecommendService recommendService;
 
     @RequestMapping(value = "/itemRecommend", method = RequestMethod.GET)
-    public void getRecommend(String user_profile, String item_profile, HttpServletRequest req, HttpServletResponse resp) {
+    public void getRecommend(String userName, HttpServletRequest req, HttpServletResponse resp) {
         ResultPages rs = new ResultPages();
-        double[] user = {0.5, 0.4, 0.7, 1, 1};
-        double[] one = {0, 0, 0, 1, 0};
-        double[] two = {1, 1, 0, 1, 0};
-        double[] three = {1, 1, 1, 1, 1};
-        double[] four = {0, 1, 1, 1, 0};
-        double[] five = {0, 0, 0, 0, 0};
-        Map<String, double[]> test = new HashMap<>();
-        test.put("土豆", one);
-        test.put("白菜", two);
-        test.put("萝卜", three);
-        test.put("倭瓜", four);
-        test.put("西红柿", five);
-        List<String> reList = recommendService.baseCBRecommend(user, test);
+        List<String> reList = recommendService.baseCBRecommend(userName);
         rs.setSuccess(true);
         rs.setAaData(reList);
         HttpUtils.writeHttpServletResponse(resp, rs);

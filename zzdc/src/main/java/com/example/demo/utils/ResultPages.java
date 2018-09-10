@@ -8,12 +8,21 @@ import java.util.*;
 public class ResultPages {
     private boolean success = false;
     private List aaData = new ArrayList();
+    private Map mapData = new HashMap();
     private int start;
     private int length;
     private int recordsTotal;
     private int recordsFiltered;
     private String msg;
     private String draw;
+
+    public Map getMapData() {
+        return mapData;
+    }
+
+    public void setMapData(Map mapData) {
+        this.mapData = mapData;
+    }
 
     public boolean isSuccess() {
         return success;

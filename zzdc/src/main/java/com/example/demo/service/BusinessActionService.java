@@ -34,6 +34,7 @@ public class BusinessActionService {
     @Autowired
     private ShopHistoryorderEntityMapper shopHistoryMapper;
 
+
     /**
      * 处理时间
      * @param startTime
@@ -300,6 +301,43 @@ public class BusinessActionService {
         List<ShopHistoryorderEntity> shopHistory = searchHistoryOrders(shopName);
         workbook = HSSFUtils.getExcel(shopHistory, title, shopName, month);
         return workbook;
+    }
+
+    /**
+     * 商家查询所有店铺所有商品
+     * @param name
+     * @return
+     */
+    public Map<String, List<ShopHistoryorderEntity>> getAll(String name) {
+        Map<String, List<ShopHistoryorderEntity>> resultMap = new HashMap<>();
+        ShopEntityExample shopExample = new ShopEntityExample();
+        ShopEntityExample.Criteria criteria = shopExample.createCriteria();
+        criteria.andHostnameEqualTo(name);
+        List<ShopEntity> getAllShop = shopMapper.selectByExample(shopExample);
+        for (ShopEntity item : getAllShop) {
+            List<ShopHistoryorderEntity> historyOrder = searchHistoryOrders(item.getShopname());
+            resultMap.put(item.getShopname(), historyOrder);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 展示信誉值较高的店铺以及商铺对应菜品
+     * @return
+     */
+    public Map<String, List<ShopDishesEntity>> showHighCreditShop() {
+        Map<String, List<ShopDishesEntity>> map = new HashMap<>();
+        List<ShopEntity> shopList = shopMapper.selectByExample(null);
+        for (ShopEntity sh: shopList) {
+            if (sh.getCredit() > 50) {
+                ShopDishesEntityExample dishes = new ShopDishesEntityExample();
+                ShopDishesEntityExample.Criteria shCriteria = dishes.createCriteria();
+                shCriteria.andShopnameEqualTo(sh.getShopname());
+                List<ShopDishesEntity> dishList = shopDishesMapper.selectByExample(dishes);
+                map.put(sh.getShopname(), dishList);
+            }
+        }
+        return map;
     }
 }
 

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liubaoshuai_i on 2018/4/12.
@@ -214,5 +215,34 @@ public class BusinessActionController extends BaseController{
         rs.setSuccess(true);
      //   HSSFUtils.downloadFiles(hwb, shopName, resp);
         HttpUtils.writeHttpServletResponse(resp, rs);
+    }
+
+    /**
+     * 展示后台管理首页所需信息
+     * @param name
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public void getAll(String name, HttpServletRequest request, HttpServletResponse response) {
+        ResultPages rs = new ResultPages();
+        Map<String, List<ShopHistoryorderEntity>> map = businessService.getAll(name);
+        rs.setSuccess(true);
+        rs.setMapData(map);
+        HttpUtils.writeHttpServletResponse(response, rs);
+    }
+
+    /**
+     * 展示推荐店铺以及对应商品名称
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/getRecommendShop", method = RequestMethod.GET)
+    public void getReShop(HttpServletRequest request, HttpServletResponse response) {
+        ResultPages rs = new ResultPages();
+        Map<String, List<ShopDishesEntity>> map = businessService.showHighCreditShop();
+        rs.setSuccess(true);
+        rs.setMapData(map);
+        HttpUtils.writeHttpServletResponse(response, rs);
     }
 }

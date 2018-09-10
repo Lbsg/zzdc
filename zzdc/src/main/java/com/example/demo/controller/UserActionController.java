@@ -17,7 +17,7 @@ import java.text.ParseException;
  * Created by liubaoshuai_i on 2018/4/11.
  */
 @RestController
-@RequestMapping("/UserAction")
+@RequestMapping("/userAction")
 public class UserActionController extends BaseController{
 
     @Autowired

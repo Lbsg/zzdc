@@ -10,6 +10,7 @@ import com.example.demo.utils.CommonException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,9 +103,8 @@ public class InfoManageService {
      * @param password
      * @param type
      */
-    public int editUserOrBusinessInfo(String name, String phone, String address, int sex, String password, String type){
+    public int editUserOrBusinessInfo(String name, String phone, String address, String password, String type){
         int editCount;
-        String tempSex = String.valueOf(sex);
         if (type.equals("user")){
             UserEntityExample userExample = new UserEntityExample();
             UserEntityExample.Criteria criteria = userExample.createCriteria();
@@ -113,9 +113,6 @@ public class InfoManageService {
             user.setName(name);
             if (phone != null){
                 user.setPhone(phone);
-            }
-            if (tempSex.equals("")){
-                user.setSex(Integer.parseInt(tempSex));
             }
             if (password != null){
                 user.setPassword(password);
@@ -129,9 +126,6 @@ public class InfoManageService {
             business.setName(name);
             if (phone != null){
                 business.setPhone(phone);
-            }
-            if (tempSex.equals("")){
-                business.setSex(Integer.parseInt(tempSex));
             }
             if (address != null){
                 business.setAddres(address);
@@ -165,18 +159,19 @@ public class InfoManageService {
      * @param type
      */
     public List<?> search(String name, String type){
+        List<?> result;
         if (type.equals("user")){
             UserEntityExample userExample = new UserEntityExample();
             UserEntityExample.Criteria criteria = userExample.createCriteria();
             criteria.andNameEqualTo(name);
-            List<UserEntity> userList = userMapper.selectByExample(userExample);
-            return userList;
-        }else {
+            result = userMapper.selectByExample(userExample);
+        }
+        else {
             BusinessEntityExample businessExample = new BusinessEntityExample();
             BusinessEntityExample.Criteria criteria = businessExample.createCriteria();
             criteria.andNameEqualTo(name);
-            List<BusinessEntity> businessList = busMapper.selectByExample(businessExample);
-            return businessList;
+            result = busMapper.selectByExample(businessExample);
         }
+        return result;
     }
 }
